@@ -1,0 +1,24 @@
+{
+  "name": "custom-errors-factory",
+  "version": "1.0.0",
+  "description": "Construct custom error type",
+  "main": "source/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mujichOk/custom-errors-factory.git"
+  },
+  "keywords": [
+    "error",
+    "custom",
+    "factory"
+  ],
+  "author": "mujichOk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mujichOk/custom-errors-factory/issues"
+  },
+  "homepage": "https://github.com/mujichOk/custom-errors-factory#readme"
+}
