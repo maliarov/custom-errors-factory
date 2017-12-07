@@ -24,7 +24,8 @@ function ErrorFactory(type, options = {}, BaseErrorType = Error) {
             });
         }
 
-        BaseErrorType.call(this);
+        BaseErrorType.call(this, opts);
+        this.name = type;
         Error.captureStackTrace(this, CustomError);
     }
 }

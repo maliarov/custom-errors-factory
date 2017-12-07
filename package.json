@@ -1,6 +1,6 @@
 {
   "name": "custom-errors-factory",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Construct custom error type",
   "main": "source/index.js",
   "scripts": {
