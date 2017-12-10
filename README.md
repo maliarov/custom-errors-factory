@@ -4,7 +4,7 @@ Construct custom error type
 
 ## Examples
 ```javascript
-const customErrorsFactory = requre('custom-errors-factory');
+const customErrorsFactory = require('custom-errors-factory');
 
 const EntityNotFoundError = customErrorsFactory('EntityNotFound', {
   message: '[${entityType}] entity not found', 
@@ -45,7 +45,7 @@ console.log(customError instanceof AnotherCustomError); // false
 You can create custom errors map manually
 
 ```javascript
-const customErrorsFactory = requre('custom-errors-factory');
+const customErrorsFactory = require('custom-errors-factory');
 
 // from config object (note: you can use it for async load from remote server, for instance)
 const context = customErrorsFactory.createFromConfig({
@@ -76,7 +76,7 @@ Load custom errors configuration and use it like:
 
 ```javascript
 // source/errors.js
-const customErrorsFactory = requre('custom-errors-factory');
+const customErrorsFactory = require('custom-errors-factory');
 
 // from config json file
 module.exports = customErrorsFactory.loadFromFile('config/errors.json');
@@ -84,7 +84,7 @@ module.exports = customErrorsFactory.loadFromFile('config/errors.json');
 
 ```javascript
 // source/app.js
-const errors = requre('./errors');
+const errors = require('./errors');
 
 const customError = new errors.EntityNotFound({entityType: 'File', path: '/some-path-to-file'});
 ``` 
@@ -108,7 +108,7 @@ And if there is *.errors.json* file in root folder of your project then it will 
 Then you can use it like
 
 ```javascript
-const customErrorsFactory = requre('custom-errors-factory');
+const customErrorsFactory = require('custom-errors-factory');
 
 const customError = new customErrorsFactory.EntityNotFound({entityType: 'File', path: '/some-path-to-file'});
 ```
