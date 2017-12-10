@@ -1,10 +1,10 @@
 {
   "name": "custom-errors-factory",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Construct custom error type",
   "main": "source/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --config ./jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/mujichOk/custom-errors-factory/issues"
   },
-  "homepage": "https://github.com/mujichOk/custom-errors-factory#readme"
+  "homepage": "https://github.com/mujichOk/custom-errors-factory#readme",
+  "devDependencies": {
+    "jest": "21.2.1"
+  }
 }

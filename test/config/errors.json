@@ -1,0 +1,9 @@
+{
+    "NotFound": {
+        "message": "Not Found",
+        "code": 404
+    },
+    "EntityNotFound": {
+        "message": "[${entityType}] Entity Not Found"
+    }
+}
