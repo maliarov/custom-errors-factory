@@ -6,6 +6,16 @@ Construct custom error type
 ```javascript
 const customErrorsFactory = requre('custom-errors-factory');
 
+const EntityNotFoundError = customErrorsFactory('EntityNotFound', {
+  message: '[${entityType}] entity not found', 
+  entityType: 'Unknown'
+});
+
+const UserEntityNotFoundError = customErrorsFactory('UserEntityNotFound', {
+  entityType: 'User'
+}, EntityNotFoundError);
+
+const TestError = customErrorsFactory('Test');
 
 const EntityNotFoundError = customErrorsFactory('EntityNotFound', {
     message: '[${entityType}] entity not found', 
@@ -28,7 +38,6 @@ const customError = new UserEntityNotFoundError({someProperty: 'some additional 
 console.log(customError instanceof Error); // true
 console.log(customError instanceof EntityNotFoundError); // true
 console.log(customError instanceof AnotherCustomError); // false
-
 ```
 
 ## Configuration
