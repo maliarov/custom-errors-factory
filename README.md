@@ -1,14 +1,17 @@
 # custom-errors-factory [![Build Status](https://travis-ci.org/mujichOk/custom-errors-factory.svg?branch=master)](https://travis-ci.org/mujichOk/custom-errors-factory)
 
+## About
+
+Make you errors more handy. Construct them with custom properties and templated messages. Build you own tree of errors inheritance. Use all power of types and best practicies from laguages with strong errors handling experience.
+
 ## Install
 
 ```
 npm install custom-errors-factory
 ```
 
-Construct custom error type
+## Usage
 
-## Examples
 ```javascript
 const errorsFactory = require('custom-errors-factory');
 
