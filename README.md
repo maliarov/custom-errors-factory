@@ -3,7 +3,7 @@
 ## Install
 
 ```
-    npm install custom-errors-factory
+npm install custom-errors-factory
 ```
 
 Construct custom error type
@@ -92,10 +92,9 @@ Load custom errors configuration and use it like:
 ```javascript
 // source/errors.js
 const errorsFactory = require('custom-errors-factory');
-// read from config json file
-const customErrorsConfiguration = require('config/errors.json');
+const errorsConfiguration = require('config/errors.json');
 
-module.exports = errorsFactory.createFromConfig(customErrorsConfiguration);
+module.exports = errorsFactory.createFromConfig(errorsConfiguration);
 ``` 
 
 ```javascript
