@@ -42,7 +42,7 @@ console.log(customError instanceof AnotherCustomError); // false
 
 ## Configuration
 
-You can create custom errors map manually
+You can create custom errors from predefined configuration with inheritance out of box! :)
 
 ```javascript
 const customErrorsFactory = require('custom-errors-factory');
@@ -50,11 +50,20 @@ const customErrorsFactory = require('custom-errors-factory');
 // from config object (note: you can use it for async load from remote server, for instance)
 const context = customErrorsFactory.createFromConfig({
     BadRequest: {
+        base: 'HttpError',
         message: 'Bad Request',
         code: 400
     },
     EntityNotFound: {
         message: '[${entityType}] Entity Not Found'
+    },
+    HttpError: {
+        base: 'Error',
+        message: 'HttpError',
+        code: 0
+    },
+    Error: {
+        message: 'Error'
     }
 });
 ``` 
@@ -77,9 +86,10 @@ Load custom errors configuration and use it like:
 ```javascript
 // source/errors.js
 const customErrorsFactory = require('custom-errors-factory');
+// read from config json file
+const customErrorsConfiguration = require('config/errors.json');
 
-// from config json file
-module.exports = customErrorsFactory.loadFromFile('config/errors.json');
+module.exports = customErrorsFactory.createFromConfig(customErrorsConfiguration);
 ``` 
 
 ```javascript
@@ -87,28 +97,4 @@ module.exports = customErrorsFactory.loadFromFile('config/errors.json');
 const errors = require('./errors');
 
 const customError = new errors.EntityNotFound({entityType: 'File', path: '/some-path-to-file'});
-``` 
-
-And you can also enable automatically configuration file load by setting *proces.env.CUSTOM_ERRORS_FACTORY__ENABLE_DEFINITION_FILE_LOAD* with 'true' value
-And if there is *.errors.json* file in root folder of your project then it will be loaded during app start (use *process.env.CUSTOM_ERRORS_FACTORY__DEFINITION_FILE_PATH* to change default related path to configuration file, f.ex: config/errors.json)
-
-### .errors.json
-```json
-{
-    "NotFound": {
-        "message": "Not Found",
-        "code": 404
-    },
-    "EntityNotFound": {
-        "message": "[${entityType}] Entity Not Found"
-    }
-}
-``` 
-
-Then you can use it like
-
-```javascript
-const customErrorsFactory = require('custom-errors-factory');
-
-const customError = new customErrorsFactory.EntityNotFound({entityType: 'File', path: '/some-path-to-file'});
 ```

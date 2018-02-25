@@ -1,6 +1,6 @@
 {
   "name": "custom-errors-factory",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Construct custom error type",
   "main": "source/index.js",
   "scripts": {
@@ -13,7 +13,8 @@
   "keywords": [
     "error",
     "custom",
-    "factory"
+    "factory",
+    "inheritance"
   ],
   "author": "mujichOk",
   "license": "MIT",

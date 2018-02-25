@@ -1,33 +1,14 @@
-const { AssertionError } = require('assert');
-
+const {AssertionError} = require('assert');
 
 describe('construct', () => {
     let customErrorsFactory;
 
     beforeAll(() => {
-        delete process.env.CUSTOM_ERRORS_FACTORY__DEFINITION_FILE_PATH;
-        process.env.CUSTOM_ERRORS_FACTORY__ENABLE_DEFINITION_FILE_LOAD = 'true';
-
-        jest.mock('fs', () => ({
-            existsSync: () => true,
-            readFileSync: () => JSON.stringify({
-                BadRequest: {
-                    message: 'Bad Request',
-                    code: 400
-                },
-                EntityNotFound: {
-                    message: '[${entityType}] Entity Not Found'
-                }
-            })
-        }));
-
-        customErrorsFactory = require('../source/index.js');
+        customErrorsFactory = require('../source');
     });
 
     it('should load predefined errors configuration', () => {
         expect(customErrorsFactory).toBeDefined();
-        expect(customErrorsFactory).toHaveProperty('BadRequest'); 
-        expect(customErrorsFactory).toHaveProperty('EntityNotFound'); 
     });
 
     describe('params validation', () => {
@@ -68,7 +49,7 @@ describe('construct', () => {
                 error = new CustomError();
                 stack = (new Error().stack)
                     .replace('Error\n', 'CustomError\n')
-                    .replace(/constructor.test.js:(\d)+\:(\d)+/, (match) => {
+                    .replace(/construction.test.js:(\d)+\:(\d)+/, (match) => {
                         const parts = match.split(':');
                         parts[1] = (Number(parts[1]) - 1).toString();
                         return parts.join(':');
@@ -131,7 +112,7 @@ describe('construct', () => {
             let error;
 
             beforeAll(() => {
-                error = new CustomError({ message: 'this is overrided message' });
+                error = new CustomError({message: 'this is overrided message'});
             });
 
             it('should create custom error with predefined properties and overrided message', () => {
@@ -156,7 +137,7 @@ describe('construct', () => {
             let error;
 
             beforeAll(() => {
-                error = new CustomError({ propertyA: 'Value1', propertyB: 'Value2' });
+                error = new CustomError({propertyA: 'Value1', propertyB: 'Value2'});
             });
 
             it('should create custom error with resolved template in message', () => {
@@ -230,9 +211,9 @@ describe('construct', () => {
         let CustomError;
 
         beforeAll(() => {
-            Level1Error = customErrorsFactory('Level1Error', { message: '${a} and ${b} and ${c}' });
-            Level2Error = customErrorsFactory('Level2Error', { a: 'A' }, Level1Error);
-            CustomError = customErrorsFactory('CustomError', { b: 'B' }, Level2Error);
+            Level1Error = customErrorsFactory('Level1Error', {message: '${a} and ${b} and ${c}'});
+            Level2Error = customErrorsFactory('Level2Error', {a: 'A'}, Level1Error);
+            CustomError = customErrorsFactory('CustomError', {b: 'B'}, Level2Error);
         });
 
         describe('create instance of custom error type', () => {
@@ -250,23 +231,52 @@ describe('construct', () => {
         });
     });
 
+    describe('try create errors from invalid configuration', () => {
+        it('should create custom error types defined by config', () => {
+            expect(() => {
+                customErrorsFactory.createFromConfig({
+                    BadRequest: {
+                        base: 'UnknownError',
+                        message: 'Bad Request',
+                        code: 400
+                    }
+                });
+            }).toThrowError('Unknown [UnknownError] base type');
+        });
+    });
+
     describe('define custom error types from data object', () => {
         let errors;
 
         beforeAll(() => {
             errors = customErrorsFactory.createFromConfig({
                 BadRequest: {
+                    base: 'HttpError',
                     message: 'Bad Request',
                     code: 400
                 },
                 EntityNotFound: {
                     message: '[${entityType}] Entity Not Found'
+                },
+                HttpError: {
+                    base: 'Error',
+                    message: 'Http Error',
+                    code: 0
+                },
+                Error: {
+                    message: 'The very base Error'
+                },
+                unAuthorized: {
+                    base: 'HttpError',
+                    message: 'UNAUTHORIZED',
+                    code: 401
                 }
             });
         });
 
         it('should create custom error types defined by config', () => {
             expect(errors).toBeDefined();
+            expect(errors).toHaveProperty('BadRequest');
             expect(errors).toHaveProperty('BadRequest');
             expect(errors).toHaveProperty('EntityNotFound');
         });
@@ -291,7 +301,7 @@ describe('construct', () => {
                 let error;
 
                 beforeAll(() => {
-                    error = new errors.EntityNotFound({ entityType: 'File' });
+                    error = new errors.EntityNotFound({entityType: 'File'});
                 });
 
                 it('should create EntityNotFound error', () => {
@@ -301,20 +311,6 @@ describe('construct', () => {
                     expect(error).toHaveProperty('entityType', 'File');
                 });
             });
-        });
-    });
-
-    describe('define custom error types from json file', () => {
-        let errors;
-
-        beforeAll(() => {
-            errors = customErrorsFactory.loadFromFile('.errors.json');
-        });
-
-        it('should create custom error types defined by config', () => {
-            expect(errors).toBeDefined();
-            expect(errors).toHaveProperty('BadRequest');
-            expect(errors).toHaveProperty('EntityNotFound');
         });
     });
 });

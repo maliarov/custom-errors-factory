@@ -1,20 +1,10 @@
 const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
 
-const defaultErrorFilePath = process.env.CUSTOM_ERRORS_FACTORY__DEFINITION_FILE_PATH || '.errors.json';
 const typeNameMatcher = /^[_a-zA-Z][_a-zA-Z0-9]*$/;
 
 module.exports = ErrorFactory;
 
-if (process.env.CUSTOM_ERRORS_FACTORY__ENABLE_DEFINITION_FILE_LOAD === 'true') {
-    if (fs.existsSync(defaultErrorFilePath)) {
-        Object.assign(module.exports, loadFromFile(defaultErrorFilePath));
-    }
-}
 
-
-ErrorFactory.loadFromFile = loadFromFile;
 ErrorFactory.createFromConfig = createFromConfig;
 
 function ErrorFactory(typeName, options = {}, BaseErrorType = Error) {
@@ -23,6 +13,7 @@ function ErrorFactory(typeName, options = {}, BaseErrorType = Error) {
     assert(BaseErrorType === Error || BaseErrorType.prototype instanceof Error, 'BaseErrorType must be inherited from Error');
 
     CustomError.prototype = Object.create(BaseErrorType.prototype);
+    
     return CustomError;
 
 
@@ -51,13 +42,30 @@ function ErrorFactory(typeName, options = {}, BaseErrorType = Error) {
     }
 }
 
-function loadFromFile(filePath) {
-    return createFromConfig(JSON.parse(fs.readFileSync(path.join(process.cwd(), filePath))));
+function createFromConfig(data) {
+    const context = {};
+
+    Object.keys(data).forEach((key) => {
+        context[key] = context[key] || createError(key, data[key]);
+    });
+
+    return context;
+
+
+    function createError(key, meta) {
+        let baseType;
+
+        if (meta.base) {
+            if (context[meta.base]) {
+                base = context[meta.base];
+            } else if (data[meta.base]) {
+                base = createError(meta.base, data[meta.base])
+            } else {
+                throw new Error(`Unknown [${meta.base}] base type`);
+            }
+        }
+
+        return context[key] = ErrorFactory(key, meta, baseType);
+    }
 }
 
-function createFromConfig(data) {
-    return Object.keys(data).reduce((context, key) => {
-        context[key] = ErrorFactory(key, data[key]);
-        return context;
-    }, {});
-}
