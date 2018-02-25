@@ -4,31 +4,31 @@ Construct custom error type
 
 ## Examples
 ```javascript
-const customErrorsFactory = require('custom-errors-factory');
+const errorsFactory = require('custom-errors-factory');
 
-const EntityNotFoundError = customErrorsFactory('EntityNotFound', {
+const EntityNotFoundError = errorsFactory('EntityNotFound', {
   message: '[${entityType}] entity not found', 
   entityType: 'Unknown'
 });
 
-const UserEntityNotFoundError = customErrorsFactory('UserEntityNotFound', {
+const UserEntityNotFoundError = errorsFactory('UserEntityNotFound', {
   entityType: 'User'
 }, EntityNotFoundError);
 
-const TestError = customErrorsFactory('Test');
+const TestError = errorsFactory('Test');
 
-const EntityNotFoundError = customErrorsFactory('EntityNotFound', {
+const EntityNotFoundError = errorsFactory('EntityNotFound', {
     message: '[${entityType}] entity not found', 
     entityType: 'Unknown'
 });
 
-const UserEntityNotFoundError = customErrorsFactory('UserEntityNotFound', {
+const UserEntityNotFoundError = errorsFactory('UserEntityNotFound', {
     entityType: 'User'
 }, EntityNotFoundError);
 
-const AnotherCustomError = customErrorsFactory('CustomError');
+const AnotherCustomError = errorsFactory('CustomError');
 
-const CustomWithInnerError = customErrorsFactory('CustomWithInnerError')
+const CustomWithInnerError = errorsFactory('CustomWithInnerError')
     .innerError(new Error('custom error'));
 
 
@@ -45,10 +45,10 @@ console.log(customError instanceof AnotherCustomError); // false
 You can create custom errors from predefined configuration with inheritance out of box! :)
 
 ```javascript
-const customErrorsFactory = require('custom-errors-factory');
+const errorsFactory = require('custom-errors-factory');
 
 // from config object (note: you can use it for async load from remote server, for instance)
-const context = customErrorsFactory.createFromConfig({
+const context = errorsFactory.createFromConfig({
     BadRequest: {
         base: 'HttpError',
         message: 'Bad Request',
@@ -85,11 +85,11 @@ Load custom errors configuration and use it like:
 
 ```javascript
 // source/errors.js
-const customErrorsFactory = require('custom-errors-factory');
+const errorsFactory = require('custom-errors-factory');
 // read from config json file
 const customErrorsConfiguration = require('config/errors.json');
 
-module.exports = customErrorsFactory.createFromConfig(customErrorsConfiguration);
+module.exports = errorsFactory.createFromConfig(customErrorsConfiguration);
 ``` 
 
 ```javascript
