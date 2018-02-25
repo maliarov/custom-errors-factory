@@ -99,7 +99,7 @@ module.exports = errorsFactory.createFromConfig(errorsConfiguration);
 
 ```javascript
 // source/app.js
-const errors = require('./errors');
+const {EntityNotFound} = require('./errors');
 
-const customError = new errors.EntityNotFound({entityType: 'File', path: '/some-path-to-file'});
+const customError = new EntityNotFound({entityType: 'File', path: '/some-path-to-file'});
 ```
