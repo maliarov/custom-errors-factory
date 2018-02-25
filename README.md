@@ -1,5 +1,11 @@
 # custom-errors-factory [![Build Status](https://travis-ci.org/mujichOk/custom-errors-factory.svg?branch=master)](https://travis-ci.org/mujichOk/custom-errors-factory)
 
+## Install
+
+```
+    npm install custom-errors-factory
+```
+
 Construct custom error type
 
 ## Examples
